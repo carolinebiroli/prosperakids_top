@@ -842,8 +842,8 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
                             </div>
                         )}
                       </>
-                  )
-              </div>
+                  )}
+                </div>
               )
           )}
           

@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, loggedInUser, onLogout }) =
             onClick={() => onNavigate('landing')}
             className="text-gray-500 hover:text-prospera-purple font-bold transition-colors"
           >
-            Comunidade no WhatsApp
+            Grupo
           </button>
           {loggedInUser ? (
             <>
