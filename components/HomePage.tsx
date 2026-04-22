@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { CheckIcon, StoryIcon, WhatsAppIcon, HeartIcon, SeedlingIcon, SparklesIcon, BrainIcon, ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, ChevronDownIcon, HeroIllustration } from './icons/Icons';
 
 interface HomePageProps {
-  onNavigateToMembers: (tierId?: string) => void;
+  onNavigateToMembers: () => void;
 }
 
 const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description: string; }> = ({ icon, title, description }) => (
@@ -144,21 +144,17 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
         <div className="container mx-auto px-6 py-16 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               {/* Left Column: Text */}
             <div className="text-center md:text-left animate-fade-in">
-                <span className="bg-prospera-green/20 text-prospera-green border border-prospera-green/30 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 inline-block backdrop-blur-sm">
-                    Comunidade Gratuita no WhatsApp
-                </span>
                 <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold text-prospera-purple mb-6 leading-tight">
-                    Forme o <span className="text-prospera-orange">caráter</span> do seu filho com <span className="text-prospera-pink">princípios</span> que o mundo não ensina.
+                    Crie conexão com seu filho em 5 minutos por dia
                 </h1>
                 <p className="text-lg md:text-xl mb-8 max-w-xl mx-auto md:mx-0 text-gray-700 leading-relaxed">
-                    Junte-se ao movimento de mães que estão formando uma nova geração com princípios elevados, inteligência emocional e propósito de vida.
+                    Reduza telas e forme o caráter do seu filho sem esforço ou planejamento. Um método prático para pais ocupados que transforma a culpa em momentos reais de conexão.
                 </p>
                 <button
-                    onClick={() => { window.location.href = "https://chat.whatsapp.com/HJzemJT2oekEVxegGoc3tq"; }}
-                    className="bg-prospera-green text-white font-bold py-5 px-12 rounded-full text-xl shadow-xl hover:bg-prospera-purple transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-2xl animate-pulse-subtle flex items-center justify-center gap-2 mx-auto md:mx-0"
+                    onClick={scrollToPricing}
+                    className="bg-prospera-green text-white font-bold py-5 px-12 rounded-full text-xl shadow-xl hover:bg-prospera-purple transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-2xl animate-pulse-subtle"
                 >
-                    <WhatsAppIcon className="w-6 h-6 text-white" />
-                    Quero entrar no grupo gratuito
+                    Assinar agora
                 </button>
             </div>
             {/* Right Column: Illustration */}
@@ -274,7 +270,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
           </div>
           <div className="mt-12">
             <button
-               onClick={() => onNavigateToMembers('core')}
+              onClick={scrollToPricing}
               className="bg-prospera-green text-white font-bold py-4 px-10 rounded-full text-lg shadow-xl hover:bg-prospera-purple transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-2xl animate-pulse-subtle"
             >
               Quero participar
@@ -322,7 +318,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
                         <span>Conteúdo básico por fase</span>
                     </li>
                 </ul>
-                <button onClick={() => onNavigateToMembers('starter')} className="w-full bg-gray-100 text-gray-800 font-bold py-3 rounded-full hover:bg-gray-200 transition-colors mt-auto">
+                <button onClick={onNavigateToMembers} className="w-full bg-gray-100 text-gray-800 font-bold py-3 rounded-full hover:bg-gray-200 transition-colors mt-auto">
                     Assinar Starter
                 </button>
             </div>
@@ -354,7 +350,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
                         <span><strong>Todos os 5 Bônus exclusivos</strong> incluídos</span>
                     </li>
                 </ul>
-                <button onClick={() => onNavigateToMembers('core')} className="w-full bg-prospera-green text-white font-bold py-4 rounded-full shadow-lg hover:bg-prospera-purple hover:scale-105 transition-all mt-auto">
+                <button onClick={onNavigateToMembers} className="w-full bg-prospera-green text-white font-bold py-4 rounded-full shadow-lg hover:bg-prospera-purple hover:scale-105 transition-all mt-auto">
                     Assinar Plano Core
                 </button>
             </div>
@@ -384,7 +380,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
                         <span>Prioridade em novidades</span>
                     </li>
                 </ul>
-                <button onClick={() => onNavigateToMembers('scale')} className="w-full bg-gray-100 text-gray-800 font-bold py-3 rounded-full hover:bg-gray-200 transition-colors mt-auto">
+                <button onClick={onNavigateToMembers} className="w-full bg-gray-100 text-gray-800 font-bold py-3 rounded-full hover:bg-gray-200 transition-colors mt-auto">
                     Assinar Scale
                 </button>
             </div>
@@ -488,7 +484,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
             Junte-se a centenas de famílias e comece hoje mesmo a construir um futuro mais próspero para seus filhos, não importa a idade.
           </p>
           <button
-            onClick={() => onNavigateToMembers('core')}
+            onClick={scrollToPricing}
             className="bg-prospera-green text-white font-bold py-5 px-12 rounded-full text-xl shadow-xl hover:bg-prospera-purple transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-2xl animate-pulse-subtle"
           >
             Assinar agora

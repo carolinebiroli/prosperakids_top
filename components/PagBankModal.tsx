@@ -12,8 +12,6 @@ declare global {
 
 interface MercadoPagoModalProps {
   user: User;
-  tierId: UserTier;
-  price: number;
   onClose: () => void;
   onPaymentSuccess: () => void;
 }
@@ -36,7 +34,7 @@ const processPaymentOnBackend = async (paymentData: any): Promise<boolean> => {
 };
 
 
-const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({ user, tierId, price, onClose, onPaymentSuccess }) => {
+const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({ user, onClose, onPaymentSuccess }) => {
   const [viewState, setViewState] = useState<ViewState>('FORM');
   const [isBrickReady, setIsBrickReady] = useState(false);
   
@@ -58,7 +56,7 @@ const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({ user, tierId, price
           const bricksBuilder = mp.bricks();
           const controller = await bricksBuilder.create('cardPayment', cardPaymentBrickContainer.current!.id, {
             initialization: {
-              amount: price,
+              amount: 19.90,
               payer: {
                 email: user.email,
               },

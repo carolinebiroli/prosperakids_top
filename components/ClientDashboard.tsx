@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { User, Story, StoryCategory, ExtraContent, ExtraContentType, BlogPost, UserTier } from '../App';
+import { User, Story, StoryCategory, ExtraContent, ExtraContentType, BlogPost } from '../App';
 import { CreditCardIcon, WhatsAppIcon, CheckCircleIcon, ClockIcon, HomeIcon, BookOpenIcon, GiftIcon, HeartIcon, UserCircleIcon, MenuIcon, XIcon, SparklesIcon, ArrowLeftIcon, PlayIcon, PauseIcon, DownloadIcon, MusicNoteIcon, NewspaperIcon, SeedlingIcon, BrainIcon, SearchIcon, LockIcon, MoonIcon, SunIcon, TextSizeIcon, PencilIcon, CheckIcon } from './icons/Icons';
 import MercadoPagoModal from './PagBankModal';
 
@@ -9,7 +9,7 @@ interface ClientDashboardProps {
   stories: Story[];
   extras: ExtraContent[];
   blogPosts?: BlogPost[];
-  onPaymentSuccess: (tierId: UserTier) => void;
+  onPaymentSuccess: () => void;
   onProfileUpdate: (data: Partial<User>) => void;
   onCancelSubscription: () => void;
   onPasswordUpdate: (email: string, newPassword: string) => void;
@@ -79,7 +79,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Stories Filter & Reading State
-  const [storyFilter, setStoryFilter] = useState('relevant');
+  const [storyFilter, setStoryFilter] = useState<string>('all');
   const [extrasFilter, setExtrasFilter] = useState<string>('all'); // Filtro para Conteúdo Extra (Categoria)
   const [extrasTypeFilter, setExtrasTypeFilter] = useState<string>('all'); // Filtro para Tipo de Conteúdo
   const [extrasSearchTerm, setExtrasSearchTerm] = useState<string>(''); // Busca textual
@@ -94,8 +94,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
       name: user.name,
       whatsapp: user.whatsapp || '',
       receiveNews: user.receiveNews !== false, // Default true if undefined
-      categories: user.categories || [],
-      profiles: user.profiles || []
+      categories: user.categories || []
   });
 
   const [readingStory, setReadingStory] = useState<Story | null>(null);
@@ -153,8 +152,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
             name: user.name,
             whatsapp: user.whatsapp || '',
             receiveNews: user.receiveNews !== false,
-            categories: user.categories || [],
-            profiles: user.profiles || []
+            categories: user.categories || []
         });
     }
   }, [user, isEditingProfile]);
@@ -184,8 +182,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
         name: editFormData.name,
         whatsapp: editFormData.whatsapp,
         receiveNews: editFormData.receiveNews,
-        categories: editFormData.categories,
-        profiles: editFormData.profiles
+        categories: editFormData.categories
     });
     setIsEditingProfile(false);
   };
@@ -287,7 +284,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
               <ClockIcon className="w-12 h-12 text-prospera-orange" />
             </div>
             <p className="text-xl font-bold text-prospera-orange mb-2">Pagamento Pendente</p>
-            <p className="text-gray-600 mb-6">Finalize sua assinatura do plano {user.tier || 'Core'} para ter acesso imediato às histórias.</p>
+            <p className="text-gray-600 mb-6">Finalize sua assinatura para ter acesso imediato às histórias.</p>
             <button
               onClick={() => setIsPaymentModalOpen(true)}
               className="w-full bg-[#009EE3] text-white font-bold py-3 px-6 rounded-full text-lg shadow-lg hover:bg-[#008acf] transition-all duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center"
@@ -303,7 +300,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
             <div className="bg-prospera-green/10 rounded-full p-4 mb-4">
               <CheckCircleIcon className="w-12 h-12 text-prospera-green" />
             </div>
-            <p className="text-xl font-bold text-prospera-green mb-2">Assinatura Ativa (Plano {user.tier || 'Core'})</p>
+            <p className="text-xl font-bold text-prospera-green mb-2">Assinatura Ativa</p>
             <p className="text-gray-600 mb-6">Você tem acesso total à plataforma.</p>
             <div className="w-full bg-gray-100 text-gray-500 font-bold py-3 px-6 rounded-full text-lg flex items-center justify-center space-x-2 cursor-default">
               <CheckCircleIcon className="w-6 h-6" />
@@ -343,7 +340,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
 
   const categoryOptions = [
       { value: 'all', label: 'Todas as Fases' },
-      { value: 'relevant', label: 'Recomendadas para mim' },
       { value: 'gestante', label: 'Em gestação' },
       { value: '0-3', label: 'Curioso (0-3 anos)' },
       { value: '4-7', label: 'Explorador (4-7 anos)' },
@@ -382,9 +378,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
       </div>
       <nav className="flex-grow py-4">
         {TABS.map(tab => {
-          const isSubsLocked = subscriptionStatus !== 'pago' && (tab.id === 'stories' || tab.id === 'extras' || tab.id === 'favorites');
-          const isTierLocked = user.tier === 'starter' && tab.id === 'extras';
-          const isLocked = isSubsLocked || isTierLocked;
+          const isLocked = subscriptionStatus !== 'pago' && (tab.id === 'stories' || tab.id === 'extras' || tab.id === 'favorites');
           
           return (
             <button 
@@ -414,16 +408,10 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
   // Logic for displaying overview stories
   const getDisplayStories = () => {
     let relevantStories = stories;
-    
-    // Prioritize child profiles for filtering stories
-    if (user.profiles && user.profiles.length > 0) {
-        const profileCategories = user.profiles.map(p => p.category);
-        relevantStories = stories.filter(s => profileCategories.includes(s.category));
-    } else if (user.categories && user.categories.length > 0) {
+    if (user.categories && user.categories.length > 0) {
         relevantStories = stories.filter(s => user.categories?.includes(s.category));
+        if (relevantStories.length === 0) relevantStories = stories;
     }
-    
-    if (relevantStories.length === 0) relevantStories = stories;
     
     // Recent: Sort by Date Descending
     const recent = [...relevantStories]
@@ -442,19 +430,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
   const featuredStory = recent.length > 0 ? recent[0] : null;
 
   // Logic for the Stories Tab Filter
-  const filteredStoriesTab = stories.filter(s => {
-    if (storyFilter === 'all') return true;
-    if (storyFilter === 'relevant') {
-        if (user.profiles && user.profiles.length > 0) {
-            return user.profiles.some(p => p.category === s.category);
-        }
-        if (user.categories && user.categories.length > 0) {
-            return user.categories.includes(s.category);
-        }
-        return true; // Fallback to all if no preferences
-    }
-    return s.category === storyFilter;
-  });
+  const filteredStoriesTab = stories.filter(s => storyFilter === 'all' ? true : s.category === storyFilter);
   
   // Logic for Extras Tab Filter
   const filteredExtras = extras.filter(e => {
@@ -507,10 +483,8 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
       {isPaymentModalOpen && (
         <MercadoPagoModal 
           user={user}
-          tierId={user.tier || 'core'}
-          price={user.tier === 'starter' ? 29.90 : user.tier === 'core' ? 39.90 : 59.90}
           onClose={() => setIsPaymentModalOpen(false)}
-          onPaymentSuccess={() => onPaymentSuccess(user.tier || 'core')}
+          onPaymentSuccess={onPaymentSuccess}
         />
       )}
 
@@ -1152,84 +1126,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-gray-600 mb-3">Perfis das Crianças</label>
-                            
-                            <div className="space-y-4">
-                                {editFormData.profiles.map((profile, index) => (
-                                    <div key={profile.id} className="bg-gray-50 p-4 rounded-xl border border-gray-200 relative group">
-                                        <button 
-                                            type="button"
-                                            onClick={() => {
-                                                const newProfiles = [...editFormData.profiles];
-                                                newProfiles.splice(index, 1);
-                                                setEditFormData({...editFormData, profiles: newProfiles});
-                                            }}
-                                            className="absolute top-2 right-2 text-red-400 hover:text-red-600 p-1"
-                                        >
-                                            <XIcon className="w-4 h-4" />
-                                        </button>
-                                        
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
-                                                <label className="block text-xs font-bold text-gray-500 mb-1">Nome da Criança</label>
-                                                <input 
-                                                    type="text" 
-                                                    value={profile.name}
-                                                    onChange={(e) => {
-                                                        const newProfiles = [...editFormData.profiles];
-                                                        newProfiles[index].name = e.target.value;
-                                                        setEditFormData({...editFormData, profiles: newProfiles});
-                                                    }}
-                                                    className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-prospera-purple bg-white text-sm"
-                                                    required
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-xs font-bold text-gray-500 mb-1">Fase</label>
-                                                <select 
-                                                    value={profile.category}
-                                                    onChange={(e) => {
-                                                        const newProfiles = [...editFormData.profiles];
-                                                        newProfiles[index].category = e.target.value as StoryCategory;
-                                                        setEditFormData({...editFormData, profiles: newProfiles});
-                                                    }}
-                                                    className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-prospera-purple bg-white text-sm"
-                                                >
-                                                    {categorySelection.map(cat => (
-                                                        <option key={cat.id} value={cat.id}>{cat.label}</option>
-                                                    ))}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                                
-                                {(user.tier === 'starter' || user.tier === 'core') && editFormData.profiles.length >= 1 ? (
-                                    <div className="w-full py-3 bg-gray-100 rounded-xl text-gray-500 text-sm text-center font-medium italic">
-                                        Seu plano permite 1 perfil. Faça o upgrade para Scale para adicionar mais.
-                                    </div>
-                                ) : (
-                                    <button 
-                                        type="button"
-                                        onClick={() => {
-                                            setEditFormData({
-                                                ...editFormData, 
-                                                profiles: [
-                                                    ...editFormData.profiles, 
-                                                    { id: `temp-${Date.now()}`, name: '', category: '0-3' }
-                                                ]
-                                            });
-                                        }}
-                                        className="w-full py-3 border-2 border-dashed border-prospera-purple rounded-xl text-prospera-purple font-bold flex items-center justify-center gap-2 hover:bg-prospera-purple hover:text-white transition-colors"
-                                    >
-                                        Adicionar Criança
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-600 mb-3">Fases de Interesse (Legado)</label>
+                            <label className="block text-sm font-bold text-gray-600 mb-3">Fases de Interesse</label>
                             <div className="space-y-2">
                                 {categorySelection.map(cat => (
                                     <label key={cat.id} className="flex items-center space-x-3 cursor-pointer group p-2 rounded-lg hover:bg-gray-50 transition-colors">
@@ -1335,11 +1232,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
                             )}
                         </div>
                         <div className="bg-gray-50 p-4 rounded-2xl">
-                            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Plano Atual</p>
-                            <p className="font-bold text-lg capitalize">{user.tier || 'Core'}</p>
-                        </div>
-                        <div className="bg-gray-50 p-4 rounded-2xl">
-                            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Fases Selecionadas (Legado)</p>
+                            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Fases Selecionadas</p>
                             <div className="flex flex-wrap gap-2">
                                 {user.categories && user.categories.length > 0 ? (
                                     user.categories.map(cat => (
@@ -1350,25 +1243,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user, stories, extras
                                 ) : (
                                     <span className="text-sm text-gray-500 italic">Nenhuma fase selecionada</span>
                                 )}
-                            </div>
-                        </div>
-                        <div className="bg-gray-50 p-4 rounded-2xl mt-4">
-                            <h4 className="text-sm font-bold text-gray-600 mb-2 uppercase tracking-tight">Perfis das Crianças ({user.profiles?.length || 0})</h4>
-                            <div className="space-y-2">
-                              {user.profiles && user.profiles.length > 0 ? (
-                                  user.profiles.map(profile => (
-                                      <div key={profile.id} className="bg-white p-3 rounded-lg border border-gray-200 flex justify-between items-center shadow-sm">
-                                          <div>
-                                              <span className="font-bold text-gray-800">{profile.name}</span>
-                                              <span className="text-xs text-gray-500 ml-2 block">
-                                                  Fase: {getCategoryLabel(profile.category)}
-                                              </span>
-                                          </div>
-                                      </div>
-                                  ))
-                              ) : (
-                                   <span className="text-sm text-gray-500 italic block mt-1">Nenhum perfil cadastrado.</span>
-                              )}
                             </div>
                         </div>
                     </div>
