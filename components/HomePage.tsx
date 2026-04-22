@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { CheckIcon, StoryIcon, WhatsAppIcon, HeartIcon, SeedlingIcon, SparklesIcon, BrainIcon, ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, ChevronDownIcon, HeroIllustration } from './icons/Icons';
 
 interface HomePageProps {
-  onNavigateToMembers: () => void;
+  onNavigateToMembers: (tierId?: string) => void;
 }
 
 const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description: string; }> = ({ icon, title, description }) => (
@@ -43,26 +43,26 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
   const whyParticipateSlides = [
     {
       icon: <HeartIcon />,
-      title: "Fortaleça Laços Afetivos",
-      description: "Transforme a rotina em um ritual de amor. Nossas histórias criam pontes de afeto e diálogo entre pais e filhos, desde a barriga.",
+      title: "Conexão Real Diária",
+      description: "Substitua o tempo de tela por um ritual simples antes de dormir. Crie conexão emocional com seu filho em poucos minutos por dia.",
       bgColor: "bg-prospera-orange",
     },
     {
-      icon: <SeedlingIcon />,
-      title: "Plante Sementes de Valores",
-      description: "Ensine valores como empatia, resiliência e generosidade de forma lúdica, construindo uma base sólida para o futuro.",
+      icon: <SparklesIcon />,
+      title: "Alívio Imediato da Culpa",
+      description: "Um caminho estruturado que alivia o peso da rotina corrida. Sem metodologias complexas, preparações cansativas ou improviso.",
       bgColor: "bg-prospera-blue",
     },
     {
-      icon: <SparklesIcon />,
-      title: "Crie Memórias Inesquecíveis",
-      description: "As histórias que vocês compartilham hoje se tornarão as memórias mais preciosas de amanhã, marcando a infância com momentos mágicos.",
+      icon: <SeedlingIcon />,
+      title: "Educação de Caráter",
+      description: "Ensine valores fundamentais e desenvolva a inteligência emocional de forma indireta e leve, sem gerar resistência na criança.",
       bgColor: "bg-prospera-pink",
     },
     {
       icon: <BrainIcon />,
-      title: "Estimule a Inteligência Emocional",
-      description: "Ajude seu filho a compreender e a lidar com as emoções, desenvolvendo a segurança e a confiança para enfrentar os desafios da vida.",
+      title: "Método Guiado na Prática",
+      description: "Acesse conteúdos prontos para aplicar na vida real. Uma jornada de desenvolvimento coerente e progressiva para cada idade.",
       bgColor: "bg-prospera-green",
     }
   ];
@@ -70,19 +70,19 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
   const faqs = [
     {
       question: "Como o conteúdo é dividido?",
-      answer: "Nosso conteúdo é cuidadosamente segmentado: 'Curioso' (Gestantes e 0-3 anos) com foco em vínculo; 'Explorador' (4-7 anos) com foco em magia e valores; e 'Aventureiro' (8-12 anos) com foco em dilemas e caráter."
+      answer: "A plataforma é organizada por fases do desenvolvimento: 'Curioso' (0 a 3 anos e gestantes) focado em vínculo; 'Explorador' (4 a 7 anos) focado em valores; e 'Aventureiro' (8 a 12 anos) focado em tomada de decisão e caráter."
     },
     {
-      question: "Como recebo as histórias?",
-      answer: "As histórias e conteúdos são enviados diariamente em um grupo exclusivo do WhatsApp. Você receberá um link para entrar assim que confirmar sua assinatura."
+      question: "Como funciona a garantia prolongada de 30 dias?",
+      answer: "Você tem 7 dias de garantia incondicional (reembolso total sem perguntas). Após isso, você tem uma extensão de até 30 dias na qual nossa equipe pode te orientar a adaptar o método para sua realidade. Nosso objetivo é garantir que você consiga fortalecer o vínculo."
     },
     {
-      question: "Posso cancelar a qualquer momento?",
-      answer: "Sim! Você pode cancelar sua assinatura quando quiser, sem nenhuma burocracia. O acesso continua garantido até o fim do período já pago."
+      question: "E se eu não tiver tempo na rotina?",
+      answer: "O método CONEC foi desenhado exatamente para pais sobrecarregados. O programa exige apenas cerca de 5 a 10 minutos por dia e não demanda planejamento ou estudos da sua parte."
     },
     {
-      question: "Além das histórias, o que mais eu recebo?",
-      answer: "Junto com as histórias, enviamos materiais complementares, como atividades lúdicas e perguntas para reflexão, para aprofundar o aprendizado e a diversão em família."
+      question: "O que recebo além das histórias?",
+      answer: "Dependendo do plano escolhido, você recebe o Checklist do Momento Sem Estresse, Sinais de Progresso, Biblioteca de Perguntas, Plano de Emergência para Birras e Acesso Antecipado a novidades."
     }
   ];
 
@@ -142,19 +142,23 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-pink-100 to-blue-100 overflow-hidden">
         <div className="container mx-auto px-6 py-16 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            {/* Left Column: Text */}
+              {/* Left Column: Text */}
             <div className="text-center md:text-left animate-fade-in">
-                <h1 className="font-display text-4xl md:text-6xl font-extrabold text-prospera-purple mb-4">
-                    Histórias que Constroem o Futuro
+                <span className="bg-prospera-green/20 text-prospera-green border border-prospera-green/30 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 inline-block backdrop-blur-sm">
+                    Comunidade Gratuita no WhatsApp
+                </span>
+                <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold text-prospera-purple mb-6 leading-tight">
+                    Forme o <span className="text-prospera-orange">caráter</span> do seu filho com <span className="text-prospera-pink">princípios</span> que o mundo não ensina.
                 </h1>
-                <p className="text-lg md:text-xl mb-8 max-w-xl mx-auto md:mx-0 text-gray-700">
-                    Conteúdo exclusivo que acompanha o crescimento do seu filho, <strong>da gestação aos 12 anos</strong>. Fortaleça valores e a inteligência emocional em cada fase.
+                <p className="text-lg md:text-xl mb-8 max-w-xl mx-auto md:mx-0 text-gray-700 leading-relaxed">
+                    Junte-se ao movimento de mães que estão formando uma nova geração com princípios elevados, inteligência emocional e propósito de vida.
                 </p>
                 <button
-                    onClick={scrollToPricing}
-                    className="bg-prospera-green text-white font-bold py-5 px-12 rounded-full text-xl shadow-xl hover:bg-prospera-purple transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-2xl animate-pulse-subtle"
+                    onClick={() => { window.location.href = "https://chat.whatsapp.com/HJzemJT2oekEVxegGoc3tq"; }}
+                    className="bg-prospera-green text-white font-bold py-5 px-12 rounded-full text-xl shadow-xl hover:bg-prospera-purple transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-2xl animate-pulse-subtle flex items-center justify-center gap-2 mx-auto md:mx-0"
                 >
-                    Assinar agora
+                    <WhatsAppIcon className="w-6 h-6 text-white" />
+                    Quero entrar no grupo gratuito
                 </button>
             </div>
             {/* Right Column: Illustration */}
@@ -254,23 +258,23 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <FeatureCard
               icon={<div className="bg-prospera-green rounded-full p-5"><CheckIcon /></div>}
-              title="1. Assine o Plano"
-              description="Escolha nosso plano mensal e faça parte do clube exclusivo Prospera Kids."
+              title="1. Selecione a Fase"
+              description="Dentro da plataforma, cadastre o perfil do seu filho escolhendo a fase (Curioso, Explorador ou Aventureiro)."
             />
             <FeatureCard
-              icon={<div className="bg-prospera-blue rounded-full p-5"><WhatsAppIcon /></div>}
-              title="2. Entre no Grupo"
-              description="Você receberá um link para entrar no nosso grupo VIP do WhatsApp."
+              icon={<div className="bg-prospera-blue rounded-full p-5"><StoryIcon /></div>}
+              title="2. Acesse o Conteúdo"
+              description="Receba histórias, checklists e bônus específicos para a etapa exata de desenvolvimento em que ele está."
             />
             <FeatureCard
-              icon={<div className="bg-prospera-pink rounded-full p-5"><StoryIcon /></div>}
-              title="3. Receba Histórias"
-              description="Todos os dias, um novo conteúdo adequado para a fase do seu filho chegará para você no Grupo VIP."
+              icon={<div className="bg-prospera-pink rounded-full p-5"><HeartIcon /></div>}
+              title="3. Crie a Conexão"
+              description="Em poucos minutos diários, aplique na sua rotina e transforme a distância em um momento real de presença."
             />
           </div>
           <div className="mt-12">
             <button
-              onClick={scrollToPricing}
+               onClick={() => onNavigateToMembers('core')}
               className="bg-prospera-green text-white font-bold py-4 px-10 rounded-full text-lg shadow-xl hover:bg-prospera-purple transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-2xl animate-pulse-subtle"
             >
               Quero participar
@@ -283,7 +287,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
       <section className="bg-prospera-orange py-10">
         <div className="container mx-auto px-6 text-center">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-white drop-shadow-md">
-            Pequenas histórias, grandes princípios.
+            Educação emocional prática para pais sem tempo.
           </h2>
         </div>
       </section>
@@ -291,51 +295,110 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
       {/* Pricing Section */}
       <section id="pricing" className="py-20 bg-gray-50">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-prospera-purple mb-4">Um Plano Simples e Acessível</h2>
+          <h2 className="font-display text-4xl md:text-5xl font-bold text-prospera-purple mb-4">Escolha o Seu Plano</h2>
           <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-12">
             Tudo o que você precisa para criar momentos mágicos com seus filhos, por um preço que cabe no bolso.
           </p>
 
-          <div className="max-w-md mx-auto bg-white rounded-2xl shadow-2xl border-4 border-prospera-green p-8 transform hover:scale-105 transition-transform duration-300">
-            <h3 className="font-display text-3xl font-bold text-prospera-purple">Plano Mensal</h3>
-            <p className="bg-prospera-orange text-white font-bold py-1 px-3 rounded-full inline-block my-4 text-sm">OFERTA DE LANÇAMENTO</p>
-            
-            <div className="my-6">
-                <p className="text-lg text-gray-500">
-                    De <span className="line-through">R$ 29,90</span> por
-                </p>
-                <p className="font-display text-6xl font-extrabold text-prospera-purple">
-                    R$ 19,90
-                </p>
-                <p className="font-bold text-gray-700">no primeiro mês</p>
-                <p className="text-gray-600 mt-2">Depois do primeiro mês R$ 29,90</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
+            {/* Starter */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 transform transition-transform duration-300 hover:-translate-y-2 flex flex-col h-full">
+                <h3 className="font-display text-2xl font-bold text-gray-800">Starter</h3>
+                <div className="my-6">
+                    <p className="font-display text-4xl font-extrabold text-prospera-purple">R$ 29,90</p>
+                    <p className="font-bold text-gray-500 text-sm">/mês</p>
+                </div>
+                <ul className="text-left space-y-3 mb-8 text-gray-600 text-sm flex-grow">
+                    <li className="flex items-start">
+                        <CheckCircleIcon className="w-5 h-5 text-prospera-green mr-2 flex-shrink-0" />
+                        <span>Acesso às <strong>histórias diárias</strong></span>
+                    </li>
+                    <li className="flex items-start">
+                        <CheckCircleIcon className="w-5 h-5 text-prospera-green mr-2 flex-shrink-0" />
+                        <span><strong>1 perfil</strong> de criança</span>
+                    </li>
+                    <li className="flex items-start">
+                        <CheckCircleIcon className="w-5 h-5 text-prospera-green mr-2 flex-shrink-0" />
+                        <span>Conteúdo básico por fase</span>
+                    </li>
+                </ul>
+                <button onClick={() => onNavigateToMembers('starter')} className="w-full bg-gray-100 text-gray-800 font-bold py-3 rounded-full hover:bg-gray-200 transition-colors mt-auto">
+                    Assinar Starter
+                </button>
             </div>
 
-            <ul className="text-left space-y-4 my-8 text-gray-700">
-              <li className="flex items-center">
-                <CheckCircleIcon className="w-6 h-6 text-prospera-green mr-3 flex-shrink-0" />
-                <span><strong>Histórias diárias</strong> no WhatsApp</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircleIcon className="w-6 h-6 text-prospera-green mr-3 flex-shrink-0" />
-                <span><strong>Conteúdo para todas as idades</strong> (0 a 12 anos)</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircleIcon className="w-6 h-6 text-prospera-green mr-3 flex-shrink-0" />
-                <span><strong>7 dias de garantia</strong> incondicional</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircleIcon className="w-6 h-6 text-prospera-green mr-3 flex-shrink-0" />
-                <span><strong>Cancele quando quiser,</strong> sem burocracia</span>
-              </li>
-            </ul>
+            {/* Core (Main) */}
+            <div className="bg-white rounded-2xl shadow-2xl border-4 border-prospera-green p-8 transform scale-105 z-10 relative flex flex-col h-full">
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <span className="bg-prospera-green text-white font-bold py-1 px-4 rounded-full text-xs uppercase tracking-wider">
+                        Recomendado
+                    </span>
+                </div>
+                <h3 className="font-display text-3xl font-bold text-prospera-purple">Core</h3>
+                <div className="my-6">
+                    <p className="text-sm text-gray-500 mb-1">Teste o 1º mês por apenas R$19,90</p>
+                    <p className="font-display text-5xl font-extrabold text-prospera-purple">R$ 39,90</p>
+                    <p className="font-bold text-gray-500 text-sm">/mês</p>
+                </div>
+                <ul className="text-left space-y-4 mb-8 text-gray-700 flex-grow">
+                    <li className="flex items-start">
+                        <CheckCircleIcon className="w-5 h-5 text-prospera-green mr-2 flex-shrink-0 mt-0.5" />
+                        <span><strong>Histórias diárias completas</strong></span>
+                    </li>
+                    <li className="flex items-start">
+                        <CheckCircleIcon className="w-5 h-5 text-prospera-green mr-2 flex-shrink-0 mt-0.5" />
+                        <span><strong>Todas as fases liberadas</strong></span>
+                    </li>
+                    <li className="flex items-start">
+                        <CheckCircleIcon className="w-5 h-5 text-prospera-pink mr-2 flex-shrink-0 mt-0.5" />
+                        <span><strong>Todos os 5 Bônus exclusivos</strong> incluídos</span>
+                    </li>
+                </ul>
+                <button onClick={() => onNavigateToMembers('core')} className="w-full bg-prospera-green text-white font-bold py-4 rounded-full shadow-lg hover:bg-prospera-purple hover:scale-105 transition-all mt-auto">
+                    Assinar Plano Core
+                </button>
+            </div>
 
-            <button
-              onClick={onNavigateToMembers}
-              className="w-full bg-prospera-green text-white font-bold py-4 px-10 rounded-full text-lg shadow-xl hover:bg-prospera-purple transition-all duration-300 ease-in-out transform hover:scale-110"
-            >
-              Assinar por R$19,90
-            </button>
+            {/* Scale */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 transform transition-transform duration-300 hover:-translate-y-2 flex flex-col h-full">
+                <h3 className="font-display text-2xl font-bold text-gray-800">Scale</h3>
+                <div className="my-6">
+                    <p className="font-display text-4xl font-extrabold text-prospera-purple">R$ 59,90</p>
+                    <p className="font-bold text-gray-500 text-sm">/mês</p>
+                </div>
+                <ul className="text-left space-y-3 mb-8 text-gray-600 text-sm flex-grow">
+                    <li className="flex items-start">
+                        <CheckCircleIcon className="w-5 h-5 text-prospera-green mr-2 flex-shrink-0" />
+                        <span>Tudo do Plano Core</span>
+                    </li>
+                    <li className="flex items-start">
+                        <CheckCircleIcon className="w-5 h-5 text-prospera-green mr-2 flex-shrink-0" />
+                        <span><strong>2 ou mais perfis</strong> de filhos</span>
+                    </li>
+                    <li className="flex items-start">
+                        <CheckCircleIcon className="w-5 h-5 text-prospera-green mr-2 flex-shrink-0" />
+                        <span><strong>Conteúdos extras</strong> exclusivos da plataforma</span>
+                    </li>
+                    <li className="flex items-start">
+                        <CheckCircleIcon className="w-5 h-5 text-prospera-green mr-2 flex-shrink-0" />
+                        <span>Prioridade em novidades</span>
+                    </li>
+                </ul>
+                <button onClick={() => onNavigateToMembers('scale')} className="w-full bg-gray-100 text-gray-800 font-bold py-3 rounded-full hover:bg-gray-200 transition-colors mt-auto">
+                    Assinar Scale
+                </button>
+            </div>
+          </div>
+
+          <div className="mt-16 bg-blue-50 max-w-4xl mx-auto rounded-3xl p-8 border border-blue-100 text-left flex flex-col md:flex-row gap-6 items-center">
+             <div className="bg-white p-4 rounded-full shadow-sm shrink-0">
+                <CheckCircleIcon className="w-12 h-12 text-prospera-blue" />
+             </div>
+             <div>
+                 <h4 className="font-display text-2xl font-bold text-gray-800 mb-2">Garantia Risco Zero 7 + 30 Dias</h4>
+                 <p className="text-gray-600 mb-2">Se nos primeiros <strong>7 dias</strong> você sentir que o programa não é para você, devolvemos 100% do seu dinheiro, sem perguntas.</p>
+                 <p className="text-gray-600 text-sm">E mais: como a conexão não acontece em 1 dia, você tem uma proteção estendida de <strong>até 30 dias</strong> para testar a aplicação na sua rotina com auxílio guiado da nossa equipe.</p>
+             </div>
           </div>
         </div>
       </section>
@@ -425,7 +488,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigateToMembers }) => {
             Junte-se a centenas de famílias e comece hoje mesmo a construir um futuro mais próspero para seus filhos, não importa a idade.
           </p>
           <button
-            onClick={scrollToPricing}
+            onClick={() => onNavigateToMembers('core')}
             className="bg-prospera-green text-white font-bold py-5 px-12 rounded-full text-xl shadow-xl hover:bg-prospera-purple transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-2xl animate-pulse-subtle"
           >
             Assinar agora

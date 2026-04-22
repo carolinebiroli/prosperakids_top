@@ -15,6 +15,9 @@ type AuthView = 'login' | 'signup' | 'forgot' | 'reset';
 const MembersArea: React.FC<MembersAreaProps> = ({ onLogin, onSignup, users, initialView = 'login', onPasswordReset }) => {
   const [view, setView] = useState<AuthView>(initialView);
   
+  // Try to extract tierId from the URL
+  const tierIdFromUrl = new URLSearchParams(window.location.search).get('tierId') || 'core';
+  
   // Login/Signup Fields - Inicializar com dados da Ana apenas se a view inicial for login
   const [email, setEmail] = useState(initialView === 'login' ? 'cliente@email.com' : '');
   const [password, setPassword] = useState(initialView === 'login' ? '123456' : '');
@@ -106,8 +109,10 @@ const MembersArea: React.FC<MembersAreaProps> = ({ onLogin, onSignup, users, ini
         password,
         role: 'client',
         subscriptionStatus: 'pendente',
+        tier: tierIdFromUrl as any,
         whatsapp: cleanedWhatsapp,
-        categories: selectedCategories,
+        profiles: selectedCategories.map((cat, idx) => ({ id: `p-${Date.now()}-${idx}`, name: `Criança ${idx + 1}`, category: cat })),
+        categories: selectedCategories, // Keep for backward compatibility for now
         favorites: []
       };
 

@@ -16,15 +16,25 @@ import LandingPage from './components/LandingPage';
 
 export type Page = 'home' | 'members' | 'about' | 'contact' | 'terms' | 'privacy' | 'blog' | 'blogPost' | 'landing';
 
+export type UserTier = 'starter' | 'core' | 'scale';
+
+export type UserProfile = {
+    id: string;
+    name: string;
+    category: StoryCategory;
+};
+
 export type User = {
   name: string;
   email: string;
   role: 'client' | 'admin';
   subscriptionStatus: 'pago' | 'pendente' | 'cancelado';
+  tier?: UserTier;
+  profiles?: UserProfile[];
   whatsapp?: string;
   password?: string;
   subscriptionDate?: string;
-  categories?: StoryCategory[];
+  categories?: StoryCategory[]; // Legacy support
   favorites?: string[];
   receiveNews?: boolean;
 };
@@ -60,7 +70,7 @@ export type BlogPost = {
   theme?: string;
 };
 
-export type ExtraContentType = 'atividade' | 'audio' | 'ebook';
+export type ExtraContentType = 'checklist' | 'biblioteca' | 'plano' | 'acesso_antecipado' | 'atividade' | 'audio' | 'ebook';
 
 export type ExtraContent = {
     id: string;
@@ -81,15 +91,30 @@ const initialUsers: User[] = [
     name: 'Carol Prospera',
     role: 'admin',
     subscriptionStatus: 'pago',
+    tier: 'scale'
   },
-  { name: 'Ana Silva', email: 'cliente@email.com', password: '123456', role: 'client', subscriptionStatus: 'pago', whatsapp: '11999999999', subscriptionDate: new Date().toISOString(), favorites: [], categories: ['0-3'], receiveNews: true },
-  { name: 'Bruno Costa', email: 'bruno@email.com', role: 'client', subscriptionStatus: 'pago', whatsapp: '11987654321', subscriptionDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(), favorites: [], categories: ['4-7'] },
-  { name: 'Carla Dias', email: 'carla@email.com', role: 'client', subscriptionStatus: 'pago', whatsapp: '21912345678', subscriptionDate: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString(), favorites: [] },
+  { 
+      name: 'Ana Silva', 
+      email: 'cliente@email.com', 
+      password: '123456', 
+      role: 'client', 
+      subscriptionStatus: 'pago', 
+      tier: 'core',
+      whatsapp: '11999999999', 
+      subscriptionDate: new Date().toISOString(), 
+      favorites: [], 
+      receiveNews: true,
+      profiles: [
+          { id: 'p1', name: 'Lucas', category: '0-3' }
+      ]
+  },
+  { name: 'Bruno Costa', email: 'bruno@email.com', role: 'client', subscriptionStatus: 'pago', tier: 'starter', whatsapp: '11987654321', subscriptionDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(), favorites: [], profiles: [{ id: 'p2', name: 'Pedro', category: '4-7' }] },
+  { name: 'Carla Dias', email: 'carla@email.com', role: 'client', subscriptionStatus: 'pago', tier: 'scale', whatsapp: '21912345678', subscriptionDate: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString(), favorites: [], profiles: [{ id: 'p3', name: 'João', category: '8-12' }, { id: 'p4', name: 'Maria', category: '0-3' }] },
   { name: 'Daniel Souza', email: 'daniel@email.com', role: 'client', subscriptionStatus: 'pendente', whatsapp: '', favorites: [] },
-  { name: 'Eduarda Lima', email: 'eduarda@email.com', role: 'client', subscriptionStatus: 'pago', whatsapp: '31999998888', subscriptionDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), favorites: [] },
-  { name: 'Fernando Alves', email: 'fernando@email.com', role: 'client', subscriptionStatus: 'pago', whatsapp: '41988776655', subscriptionDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), favorites: [] },
+  { name: 'Eduarda Lima', email: 'eduarda@email.com', role: 'client', subscriptionStatus: 'pago', tier: 'core', whatsapp: '31999998888', subscriptionDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), favorites: [], profiles: [{ id: 'p5', name: 'Sofia', category: '0-3' }] },
+  { name: 'Fernando Alves', email: 'fernando@email.com', role: 'client', subscriptionStatus: 'pago', tier: 'starter', whatsapp: '41988776655', subscriptionDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), favorites: [], profiles: [{ id: 'p6', name: 'Miguel', category: '4-7' }] },
   { name: 'Gabriela Ramos', email: 'gabriela@email.com', role: 'client', subscriptionStatus: 'pendente', whatsapp: '', favorites: [] },
-  { name: 'Heitor Martins', email: 'heitor@email.com', role: 'client', subscriptionStatus: 'pago', whatsapp: '51977665544', subscriptionDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), favorites: [] },
+  { name: 'Heitor Martins', email: 'heitor@email.com', role: 'client', subscriptionStatus: 'pago', tier: 'scale', whatsapp: '51977665544', subscriptionDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), favorites: [], profiles: [{ id: 'p7', name: 'Alice', category: '0-3' }, { id: 'p8', name: 'Davi', category: '8-12' }] },
   { name: 'Isabela Rocha', email: 'isabela@email.com', role: 'client', subscriptionStatus: 'cancelado', whatsapp: '61988887777', subscriptionDate: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(), favorites: [] }
 ];
 
@@ -142,52 +167,52 @@ const initialBlogPosts: BlogPost[] = [
 const initialExtras: ExtraContent[] = [
     {
         id: '1',
-        title: 'Livro de Colorir: A Turma do Pipo',
-        description: 'Um caderno com 10 desenhos exclusivos dos personagens para imprimir e colorir.',
-        type: 'atividade',
-        category: '0-3',
+        title: 'Checklist do Momento Sem Estresse',
+        description: 'Siga um passo a passo simples para aplicar o método no seu dia — sem pensar, sem sobrecarga e sem transformar isso em mais uma tarefa pesada.',
+        type: 'checklist',
+        category: 'all',
         imageUrl: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1171&q=80',
         resourceUrl: '#',
         createdAt: new Date().toISOString()
     },
     {
         id: '2',
-        title: 'Guia: Lidando com a Birra',
-        description: 'Um ebook prático para pais com estratégias de disciplina positiva.',
-        type: 'ebook',
-        category: '0-3',
+        title: 'Checklist de Sinais de Progresso',
+        description: 'Saiba exatamente como identificar que está funcionando — mesmo antes das grandes mudanças aparecerem, evitando dúvidas e insegurança.',
+        type: 'checklist',
+        category: 'all',
         imageUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80',
         resourceUrl: '#',
         createdAt: new Date().toISOString()
     },
     {
         id: '3',
-        title: 'Sons da Natureza para Dormir',
-        description: 'Áudio relaxante de chuva e floresta para ajudar no sono do bebê.',
-        type: 'audio',
-        category: 'gestante',
+        title: 'Biblioteca de Perguntas que Conectam',
+        description: 'Tenha acesso a perguntas simples que fazem seu filho se abrir, conversar e se reconectar com você — mesmo que hoje ele só peça tela.',
+        type: 'biblioteca',
+        category: 'all',
         imageUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
-        resourceUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', // Link de exemplo
+        resourceUrl: '#',
         createdAt: new Date().toISOString()
     },
     {
         id: '4',
-        title: 'Caça ao Tesouro em Casa',
-        description: 'Um kit completo para organizar uma caça ao tesouro divertida na sala de casa.',
-        type: 'atividade',
-        category: '4-7',
+        title: 'Plano de Emergência para Birras',
+        description: 'Aprenda exatamente o que fazer quando seu filho resistir ou fizer birra — sem precisar voltar para a tela como solução.',
+        type: 'plano',
+        category: 'all',
         imageUrl: 'https://images.unsplash.com/photo-1558053426-5b62a69622d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1169&q=80',
         resourceUrl: '#',
         createdAt: new Date().toISOString()
     },
      {
         id: '5',
-        title: 'Podcast: O Desafio da Honestidade',
-        description: 'Uma história em áudio sobre dizer a verdade, ideal para ouvir no carro.',
-        type: 'audio',
-        category: '8-12',
+        title: 'Acesso antecipado a novos conteúdos',
+        description: 'Receba novas histórias e materiais antes de todo mundo — evoluindo junto com o método e mantendo sua rotina sempre atualizada.',
+        type: 'acesso_antecipado',
+        category: 'all',
         imageUrl: 'https://images.unsplash.com/photo-1478737270239-2f02b77ac618?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
-        resourceUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+        resourceUrl: '#',
         createdAt: new Date().toISOString()
     }
 ];
@@ -345,10 +370,16 @@ const App: React.FC = () => {
     navigateTo('members');
   };
   
-  const navigateToSignup = () => {
+  const navigateToSignup = (tierId?: string) => {
     setInitialMemberAreaView('signup');
     setCurrentPage('members');
     window.scrollTo(0, 0);
+    // Add tierId to the URL if provided
+    if (tierId) {
+        window.history.pushState({}, '', `?page=members&tierId=${tierId}`);
+    } else {
+        window.history.pushState({}, '', `?page=members`);
+    }
   };
 
   const handleCancelSubscription = () => {
@@ -367,11 +398,12 @@ const App: React.FC = () => {
     }
   };
 
-  const handlePaymentSuccess = () => {
+  const handlePaymentSuccess = (tierId: UserTier = 'core') => {
     if (loggedInUser) {
       const updatedUser = { 
         ...loggedInUser, 
         subscriptionStatus: 'pago' as const,
+        tier: tierId,
         subscriptionDate: new Date().toISOString()
       };
       setLoggedInUser(updatedUser);
